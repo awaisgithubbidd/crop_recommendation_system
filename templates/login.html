@@ -1,0 +1,84 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h3 class="mb-0">
+                    {% if register %}
+                    Create an Account
+                    {% else %}
+                    Login to Your Account
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="card-body">
+                {% if register %}
+                <form action="{{ url_for('register') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success">Register</button>
+                    </div>
+                    <div class="text-center mt-3">
+                        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+                    </div>
+                </form>
+                {% else %}
+                <form action="{{ url_for('login') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                    <div class="text-center mt-3">
+                        <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-body">
+                <h4>Benefits of Creating an Account</h4>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent">
+                        <i class="fas fa-history text-primary me-2"></i>
+                        Save your soil analysis history
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <i class="fas fa-chart-line text-success me-2"></i>
+                        Track trends in your soil parameters over time
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <i class="fas fa-download text-info me-2"></i>
+                        Export your analysis data for reference
+                    </li>
+                    <li class="list-group-item bg-transparent">
+                        <i class="fas fa-bell text-warning me-2"></i>
+                        Get personalized recommendations and updates
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

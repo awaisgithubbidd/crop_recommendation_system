@@ -1,0 +1,112 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-success text-white">
+                <h2 class="mb-0">Crop Recommendation Results</h2>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="mb-3">
+                        <i class="fas fa-seedling fa-3x text-success"></i>
+                    </div>
+                    <h3>Recommended Crop: <span class="text-success">{{ crop_data.name }}</span></h3>
+                    <p class="lead">Based on your soil parameters and climate conditions</p>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        {% if crop_data.image_url %}
+                        <img src="{{ crop_data.image_url }}" class="img-fluid rounded mb-3" alt="{{ crop_data.name }}">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <h4>About {{ crop_data.name }}</h4>
+                        <p>{{ crop_data.description }}</p>
+                        <h5>Ideal Growing Conditions</h5>
+                        <p>{{ crop_data.ideal_conditions }}</p>
+                        <h5>Growing Period</h5>
+                        <p>{{ crop_data.growing_period }}</p>
+                    </div>
+                </div>
+                
+                <h4 class="mb-3">Top Recommendations</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Crop</th>
+                                <th>Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for crop, probability in top_crops %}
+                            <tr {% if loop.index == 1 %}class="table-success"{% endif %}>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ crop }}</td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" 
+                                             style="width: {{ (probability * 100)|int }}%;" 
+                                             aria-valuenow="{{ (probability * 100)|int }}" aria-valuemin="0" aria-valuemax="100">
+                                            {{ (probability * 100)|int }}%
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 class="mt-4 mb-3">Your Input Parameters</h4>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#inputParamsModal">
+                    Show Input Parameters
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="inputParamsModal" tabindex="-1" aria-labelledby="inputParamsModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content bg-dark text-white">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="inputParamsModalLabel">Your Input Parameters</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="row">
+                            {% for param, value in input_data.items() %}
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="card h-100 border-100 bg-secondary text-white">
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">{{ param }}</h6>
+                                        <p class="card-text fw-bold">{{ value }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+                    <a href="{{ url_for('chart') }}" class="btn btn-primary">
+                        <i class="fas fa-chart-radar me-2"></i>View Soil Analysis Chart
+                    </a>
+                    <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-redo me-2"></i>New Prediction
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

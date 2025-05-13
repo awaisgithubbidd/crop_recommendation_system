@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10 mx-auto">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">Soil Parameter Analysis</h2>
+            </div>
+            <div class="card-body">
+                <canvas id="soilChart" width="400" height="200"></canvas>
+                <div class="mt-4">
+                    <h5>Understanding the Soil Parameter Analysis</h5>
+                    <p>
+                        The bar chart above displays the levels of key soil and environmental parameters that influence crop growth.
+                        The <strong>left side value</strong> (y-axis) represents the measured quantity or concentration of each parameter.
+                    </p>
+                    <ul>
+                        <li><strong>Nitrogen (N):</strong> Essential nutrient for plant growth, important for leaf development.</li>
+                        <li><strong>Phosphorous (P):</strong> Supports root development and flowering.</li>
+                        <li><strong>Potassium (K):</strong> Helps in overall plant health and disease resistance.</li>
+                        <li><strong>Temperature:</strong> Ambient temperature affecting crop suitability.</li>
+                        <li><strong>Humidity:</strong> Moisture level in the air, influencing transpiration and growth.</li>
+                        <li><strong>pH:</strong> Soil acidity or alkalinity, affecting nutrient availability.</li>
+                        <li><strong>Rainfall:</strong> Amount of precipitation, critical for water supply to crops.</li>
+                    </ul>
+                    <p>
+                        This analysis helps in understanding the current soil conditions and environmental factors,
+                        enabling better crop recommendations tailored to your land.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const ctx = document.getElementById('soilChart').getContext('2d');
+    const soilChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ labels|tojson }},
+            datasets: [{
+                label: 'Soil Parameters',
+                data: {{ data|tojson }},
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

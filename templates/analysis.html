@@ -1,0 +1,189 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-success text-white">
+                <h2 class="mb-0">Dataset Analysis Results</h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-success mb-4">
+                    <h4 class="alert-heading"><i class="fas fa-check-circle me-2"></i>Analysis Complete!</h4>
+                    <p>Your dataset <strong>{{ filename }}</strong> has been successfully analyzed. The system has processed 
+                    <strong>{{ summary.total_samples }}</strong> samples and predicted suitable crops for each.</p>
+                    <hr>
+                    <p class="mb-0">Scroll down to see the distribution of recommended crops or download the results file for detailed information.</p>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 summary-box">
+                            <div class="card-body">
+                                <h4 class="card-title">Summary</h4>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item bg-transparent">
+                                        <i class="fas fa-database text-primary me-2"></i>
+                                        <strong>Total Samples:</strong> {{ summary.total_samples }}
+                                    </li>
+                                    <li class="list-group-item bg-transparent">
+                                        <i class="fas fa-seedling text-success me-2"></i>
+                                        <strong>Unique Crops Recommended:</strong> {{ summary.unique_crops }}
+                                    </li>
+                                    <li class="list-group-item bg-transparent">
+                                        <i class="fas fa-file-csv text-info me-2"></i>
+                                        <strong>Results File:</strong> {{ summary.result_filename }}
+                                    </li>
+                                </ul>
+                                <div class="d-grid gap-2 mt-3">
+                                    <a href="{{ url_for('download_file', filename=summary.result_filename) }}" class="btn btn-primary">
+                                        <i class="fas fa-download me-2"></i>Download Results
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0">
+                            <div class="card-body">
+                                <h4 class="card-title mb-3">Crop Distribution</h4>
+                                <div class="chart-container" style="position: relative; height:300px;">
+                                    <canvas id="cropDistributionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4 class="mb-3">Detailed Crop Distribution</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Crop</th>
+                                <th>Count</th>
+                                <th>Percentage</th>
+                                <th>Distribution</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for crop, count in summary.crop_distribution.items() %}
+                            <tr>
+                                <td>{{ crop }}</td>
+                                <td>{{ count }}</td>
+                                <td>{{ (count / summary.total_samples * 100) | round(1) }}%</td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" 
+                                             style="width: {{ (count / summary.total_samples * 100) | round(1) }}%;" 
+                                             aria-valuenow="{{ (count / summary.total_samples * 100) | round(1) }}" 
+                                             aria-valuemin="0" aria-valuemax="100">
+                                            {{ (count / summary.total_samples * 100) | round(1) }}%
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="alert alert-info mt-4">
+                    <h5><i class="fas fa-lightbulb me-2"></i>Interpretation Tips</h5>
+                    <p>
+                        The distribution above shows which crops are most suitable across your dataset. If multiple crops are recommended with similar 
+                        frequencies, consider the following factors for final selection:
+                    </p>
+                    <ul>
+                        <li>Local market demand and prices</li>
+                        <li>Your farming expertise and equipment</li>
+                        <li>Water availability and irrigation capabilities</li>
+                        <li>Seasonal considerations and crop rotation practices</li>
+                    </ul>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+                    <a href="{{ url_for('upload') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-upload me-2"></i>Upload Another Dataset
+                    </a>
+                    <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-home me-2"></i>Return to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get distribution data
+        const cropDistribution = {{ summary.crop_distribution|tojson }};
+        const labels = Object.keys(cropDistribution);
+        const data = Object.values(cropDistribution);
+        
+        // Generate colors
+        const colors = [
+            'rgba(40, 167, 69, 0.7)',    // Green
+            'rgba(0, 123, 255, 0.7)',    // Blue
+            'rgba(0, 128, 0, 0.7)',      // Dark Green (instead of Yellow)
+            'rgba(220, 53, 69, 0.7)',    // Red
+            'rgba(111, 66, 193, 0.7)',   // Purple
+            'rgba(23, 162, 184, 0.7)',   // Cyan
+            'rgba(255, 127, 80, 0.7)',   // Coral
+            'rgba(50, 205, 50, 0.7)',    // Lime
+            'rgba(255, 99, 132, 0.7)',   // Pink
+            'rgba(54, 162, 235, 0.7)',   // Light Blue
+            'rgba(255, 206, 86, 0.7)',   // Light Yellow
+            'rgba(75, 192, 192, 0.7)',   // Teal
+            'rgba(153, 102, 255, 0.7)',  // Purple
+            'rgba(255, 159, 64, 0.7)',   // Orange
+            'rgba(199, 199, 199, 0.7)',  // Gray
+            'rgba(83, 102, 255, 0.7)',   // Indigo
+            'rgba(255, 99, 71, 0.7)',    // Tomato
+            'rgba(60, 179, 113, 0.7)',   // Medium Sea Green
+            'rgba(106, 90, 205, 0.7)',   // Slate Blue
+            'rgba(255, 69, 0, 0.7)'      // Red Orange
+        ];
+        
+        // Create the chart
+        const ctx = document.getElementById('cropDistributionChart').getContext('2d');
+        const cropChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors.slice(0, labels.length),
+                    borderColor: 'rgba(255, 255, 255, 0.8)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            boxWidth: 15,
+                            padding: 10
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+                                const percentage = Math.round((value / total) * 100);
+                                return `${label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,149 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">Upload Dataset for Batch Analysis</h2>
+            </div>
+            <div class="card-body">
+                <p class="lead">
+                    Upload a CSV file containing soil and climate parameters for multiple samples to get batch crop recommendations.
+                </p>
+                
+                <div class="alert alert-info">
+                    <h5><i class="fas fa-info-circle me-2"></i>Required CSV Format</h5>
+                    <p>Your CSV file must include the following columns:</p>
+                    <ul>
+                        <li><strong>N</strong> - Nitrogen content (kg/yards)</li>
+                        <li><strong>P</strong> - Phosphorous content (kg/yards)</li>
+                        <li><strong>K</strong> - Potassium content (kg/yards)</li>
+                        <li><strong>temperature</strong> - Temperature in degrees Celsius</li>
+                        <li><strong>humidity</strong> - Relative humidity percentage</li>
+                        <li><strong>ph</strong> - pH value of the soil</li>
+                        <li><strong>rainfall</strong> - Rainfall in mm</li>
+                    </ul>
+                    <p class="mb-0">
+                        <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#sampleCSVModal">
+                            <i class="fas fa-file-csv me-1"></i>View sample CSV format
+                        </a>
+                    </p>
+                </div>
+                
+                <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data" class="mt-4">
+                    <div class="mb-4">
+                        <label for="file" class="form-label">Choose CSV File</label>
+                        <input class="form-control" type="file" id="file" name="file" accept=".csv" required>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-upload me-2"></i>Upload and Analyze
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">Benefits of Batch Analysis</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h5><i class="fas fa-tachometer-alt text-success me-2"></i>Efficient</h5>
+                            <p>Process multiple soil samples at once, saving time and effort.</p>
+                        </div>
+                        <div class="mb-3">
+                            <h5><i class="fas fa-chart-pie text-primary me-2"></i>Comprehensive</h5>
+                            <p>Get a summary analysis of all your data, including visualization of crop distribution.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <h5><i class="fas fa-file-export text-info me-2"></i>Exportable</h5>
+                            <p>Receive results in a downloadable CSV format for further analysis.</p>
+                        </div>
+                        <div class="mb-3">
+                            <h5><i class="fas fa-map-marker-alt text-danger me-2"></i>Area-Based</h5>
+                            <p>Ideal for analyzing multiple locations or different areas within the same farm.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sample CSV Modal -->
+<div class="modal fade" id="sampleCSVModal" tabindex="-1" aria-labelledby="sampleCSVModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sampleCSVModalLabel">Sample CSV Format</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Your CSV file should look like this:</p>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>N</th>
+                                <th>P</th>
+                                <th>K</th>
+                                <th>temperature</th>
+                                <th>humidity</th>
+                                <th>ph</th>
+                                <th>rainfall</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>90</td>
+                                <td>42</td>
+                                <td>43</td>
+                                <td>20.9</td>
+                                <td>82.0</td>
+                                <td>6.5</td>
+                                <td>202.9</td>
+                            </tr>
+                            <tr>
+                                <td>85</td>
+                                <td>58</td>
+                                <td>41</td>
+                                <td>21.8</td>
+                                <td>80.3</td>
+                                <td>7.0</td>
+                                <td>226.6</td>
+                            </tr>
+                            <tr>
+                                <td>60</td>
+                                <td>55</td>
+                                <td>44</td>
+                                <td>23.1</td>
+                                <td>77.8</td>
+                                <td>6.8</td>
+                                <td>150.2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-3">
+                    <p><strong>Example CSV Content:</strong></p>
+                    <pre>N,P,K,temperature,humidity,ph,rainfall
+90,42,43,20.9,82.0,6.5,202.9
+85,58,41,21.8,80.3,7.0,226.6
+60,55,44,23.1,77.8,6.8,150.2</pre>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

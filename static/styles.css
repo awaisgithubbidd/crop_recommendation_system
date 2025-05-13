@@ -1,0 +1,257 @@
+/* Custom styles to complement Bootstrap */
+
+/* Card hover effect */
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+/* Light green background for body */
+.body-light-green {
+    background-color: #d4edda !important;
+}
+
+/* Solid green background */
+.bg-solid-green {
+    background-color: #008000 !important; /* Solid green */
+    color: white !important;
+}
+
+/* Thick rounded block with dark blue background for header and footer */
+.rounded-block-darkblue {
+    background-color: #001f4d !important; /* Dark blue */
+    border-radius: 15px !important;
+    padding: 10px !important;
+    box-shadow: 0 0 10px 3px rgba(0, 0, 139, 0.7);
+}
+
+/* Input range styling */
+.input-range-container {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.input-range-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.25rem;
+}
+
+/* Gradient backgrounds for different sections */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--bs-primary) 0%, var(--bs-info) 100%);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, var(--bs-success) 0%, var(--bs-info) 100%);
+}
+
+/* Result animation */
+.result-highlight {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(var(--bs-success-rgb), 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(var(--bs-success-rgb), 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(var(--bs-success-rgb), 0);
+    }
+}
+
+/* Progress indicators */
+.progress-indicator {
+    width: 100%;
+    height: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-bar-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bs-dark);
+}
+
+.progress-bar-fill {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    top: 0;
+    transition: width 0.8s ease-in-out;
+}
+
+/* Custom form styles */
+.form-floating {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.form-floating label {
+    opacity: 0.8;
+}
+
+.form-floating input:focus + label {
+    color: var(--bs-info);
+}
+
+/* Info icons */
+.info-icon {
+    cursor: pointer;
+    margin-left: 5px;
+    transition: color 0.2s ease;
+}
+
+.info-icon:hover {
+    color: var(--bs-info);
+}
+
+/* Recommendation cards */
+.recommendation-card {
+    border-left: 4px solid;
+    transition: transform 0.3s ease;
+}
+
+.recommendation-card.improvement {
+    border-left-color: var(--bs-info);
+}
+
+.recommendation-card.warning {
+    border-left-color: var(--bs-warning);
+}
+
+.recommendation-card:hover {
+    transform: translateX(5px);
+}
+
+/* Parameter description tooltips */
+.parameter-info {
+    position: relative;
+    display: inline-block;
+}
+
+.parameter-info:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: var(--bs-dark);
+    color: var(--bs-light);
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--bs-dark) transparent transparent transparent;
+}
+
+
+/* Background leaf image for body with overlay */
+body.bg-solid-green {
+    position: relative;
+    background-image: url('../images/leaf-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white !important;
+    z-index: 0;
+}
+
+body.bg-solid-green::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 128, 0, 0.6); /* green overlay with opacity */
+    z-index: -1;
+}
+
+/* Decorative image styles */
+.decorative-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    margin-bottom: 1rem;
+}
+
+/* Responsive adjustments for mobile devices */
+@media (max-width: 767.98px) {
+    /* Adjust navbar brand font size */
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+
+    /* Stack navbar items vertically */
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .navbar-nav .nav-item {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Adjust main container padding */
+    main.container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    /* Make recommendation cards full width */
+    .recommendation-card {
+        width: 100% !important;
+        margin-bottom: 1rem;
+        transform: none !important;
+    }
+
+    /* Adjust form floating inputs to full width */
+    .form-floating {
+        width: 100%;
+    }
+
+    /* Adjust progress indicators height */
+    .progress-indicator {
+        height: 8px;
+    }
+
+    /* Tooltip width adjustment */
+    .tooltip-text {
+        width: 150px;
+        margin-left: -75px;
+        font-size: 0.9rem;
+    }
+
+    /* Footer text size */
+    footer p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Specific style for rainfall input */
